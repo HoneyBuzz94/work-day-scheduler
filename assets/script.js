@@ -1,6 +1,3 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
 $(function () {
   // HTML variables
   var currentDay = $('#currentDay')
@@ -8,43 +5,44 @@ $(function () {
 
   // Global variables
   var today = dayjs()
-  var todayDate = today.format('MMMM D, YYYY')
+  var savedNotes = JSON.parse(localStorage.getItem("saved-notes")) || [];
 
   // Initializing function
   function init(){
-    currentDay.text(todayDate)
+    currentDay.text(today.format('MMMM D, YYYY'))
     createTimeslots()
   }
   init()
-  console.log(today.hour())
 
   // Creates timeslots and appends them to the HTML doc
   function createTimeslots(){
     var timeslotNumber = 9
-    var timeCounter = 9
-    var ampm = 'AM'
+    var timeStart = 9
     var timeState = ''
 
     for(i=0;i<timeslotNumber;i++){
-      if(timeCounter==today.hour()){
+      if(timeStart==today.hour()){
         timeState = 'present'
-      }else if(timeCounter<today.hour()){
+      }else if(timeStart<today.hour()){
         timeState = 'past'
-      }else if(timeCounter>today.hour()){
+      }else if(timeStart>today.hour()){
         timeState = 'future'
       }
       
-      var timeslotDiv = '<div id="hour-9" class="row time-block'+timeCounter+' '+timeState+'"><div class="col-2 col-md-1 hour text-center py-3">'+timeCounter+ampm+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
+      var printTime = today.hour(timeStart).format('hA')
+      var timeslotDiv = '<div class="row time-block-'+printTime+' '+timeState+'"><div class="col-2 col-md-1 hour text-center py-3">'+printTime+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
 
       timeslotContainer.append(timeslotDiv)
-      timeCounter+=1
-      if(timeCounter>11){
-        ampm = 'PM'
-      }else{
-        ampm = 'AM'
-      }
+      timeStart+=1
     }
   }
+
+  function logNotes(){
+    savedNotes.push($('.description').text());
+    localStorage.setItem("saved-notes", JSON.stringify(savedNotes));
+  }
+
+  $('saveBtn').on('click', logNotes)
   
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
