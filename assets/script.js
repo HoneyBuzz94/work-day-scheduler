@@ -7,29 +7,41 @@ $(function () {
   var timeslotContainer = $('.timeslot-container')
 
   // Global variables
-  var today = dayjs().format('MMMM D, YYYY')
+  var today = dayjs()
+  var todayDate = today.format('MMMM D, YYYY')
 
   // Initializing function
   function init(){
-    currentDay.text(today)
+    currentDay.text(todayDate)
     createTimeslots()
   }
   init()
+  console.log(today.hour())
 
+  // Creates timeslots and appends them to the HTML doc
   function createTimeslots(){
-    var numberOfTimeSlots = 9
+    var timeslotNumber = 9
     var timeCounter = 9
     var ampm = 'AM'
+    var timeState = ''
 
-    for(i=0;i<numberOfTimeSlots;i++){
-      var timeslotDiv = '<div id="hour-9" class="row time-block'+timeCounter+' past"><div class="col-2 col-md-1 hour text-center py-3">'+timeCounter+ampm+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
+    for(i=0;i<timeslotNumber;i++){
+      if(timeCounter==today.hour()){
+        timeState = 'present'
+      }else if(timeCounter<today.hour()){
+        timeState = 'past'
+      }else if(timeCounter>today.hour()){
+        timeState = 'future'
+      }
       
+      var timeslotDiv = '<div id="hour-9" class="row time-block'+timeCounter+' '+timeState+'"><div class="col-2 col-md-1 hour text-center py-3">'+timeCounter+ampm+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
+
       timeslotContainer.append(timeslotDiv)
       timeCounter+=1
-      console.log(timeCounter)
-      if(timeCounter>12){
-        timeCounter = 1
+      if(timeCounter>11){
         ampm = 'PM'
+      }else{
+        ampm = 'AM'
       }
     }
   }
