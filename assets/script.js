@@ -27,6 +27,7 @@ $(function () {
     }
     console.log(savedNotes)
     localStorage.setItem('saved-notes', JSON.stringify(savedNotes))
+    alert('Note saved')
   }
 
   // Creates timeslots and appends them to the HTML doc
@@ -42,16 +43,19 @@ $(function () {
       
       var printTime = today.hour(timeStart).format('hA')
       
-      let parentDiv = document.createElement('div')
-      parentDiv.setAttribute('class',`row time-block ${timeState}`)
-      let childDiv = document.createElement('div')
-      childDiv.setAttribute('class', 'col-2 col-md-1 hour text-center py-3')
-      childDiv.innerHTML = printTime
-      let textArea = document.createElement('textarea')
-      textArea.setAttribute('id',printTime)
-      textArea.setAttribute('class', 'col-8 col-md-10 description')
-      textArea.setAttribute('rows', '3')
-      textArea.setAttribute('contenteditable', 'true')
+      let timeBlock = document.createElement('div')
+      timeBlock.setAttribute('class',`row time-block ${timeState}`)
+      let hourBlock = document.createElement('div')
+      hourBlock.setAttribute('class', 'col-2 col-md-1 hour text-center py-3')
+      hourBlock.innerHTML = printTime
+      let noteBlock = document.createElement('textarea')
+      noteBlock.setAttribute('id',printTime)
+      noteBlock.setAttribute('class', 'col-8 col-md-10 description')
+      noteBlock.setAttribute('rows', '3')
+      noteBlock.setAttribute('contenteditable', 'true')
+      if(savedNotes.hasOwnProperty(printTime)){
+        noteBlock.textContent = savedNotes[printTime]
+      }
       let saveBtn = document.createElement('button')
       saveBtn.setAttribute('class', 'btn saveBtn col-2 col-md-1')
       saveBtn.setAttribute('aria-label', 'save')
@@ -61,14 +65,9 @@ $(function () {
       iTag.setAttribute('aria-hidden', 'true')
 
       saveBtn.append(iTag)
-      parentDiv.append(childDiv, textArea, saveBtn)
-      timeslotContainer.append(parentDiv)
+      timeBlock.append(hourBlock, noteBlock, saveBtn)
+      timeslotContainer.append(timeBlock)
       timeStart+=1
     }
   }
 });
-
-
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
