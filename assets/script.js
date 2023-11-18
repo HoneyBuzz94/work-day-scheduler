@@ -30,12 +30,22 @@ $(function () {
       }
       
       var printTime = today.hour(timeStart).format('hA')
-      var timeslotDiv = '<div class="row time-block-'+printTime+' '+timeState+'"><div class="col-2 col-md-1 hour text-center py-3">'+printTime+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
+      var timeslotDiv = '<div id="'+printTime+'" class="row time-block '+timeState+'"><div class="col-2 col-md-1 hour text-center py-3">'+printTime+'</div><textarea class="col-8 col-md-10 description" rows="3"> </textarea><button class="btn saveBtn col-2 col-md-1" aria-label="save"><i class="fas fa-save" aria-hidden="true"></i></button></div>'
 
       timeslotContainer.append(timeslotDiv)
       timeStart+=1
     }
   }
+
+  timeslotContainer.on('click', function(e){
+    if(e.target.className == 'time-block'){
+      console.log('Success!')
+    }
+  })
+
+
+
+
 
   function logNotes(){
     savedNotes.push($('.description').text());
@@ -44,6 +54,15 @@ $(function () {
 
   $('saveBtn').on('click', logNotes)
   
+
+
+
+
+
+
+
+
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
