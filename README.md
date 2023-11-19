@@ -5,7 +5,7 @@ The work day scheduler was created in an effort to utilize various third party A
 
 ## Usage
 
-This project is live and can be accessed at the following link: https://honeybuzz94.github.io/js-coding-quiz/
+This project is live and can be accessed at the following link: https://honeybuzz94.github.io/work-day-scheduler/
 
 Anyone is welcome to use or duplicate this project as they would like.
 
